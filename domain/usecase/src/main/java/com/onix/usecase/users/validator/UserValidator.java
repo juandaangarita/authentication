@@ -28,21 +28,19 @@ public class UserValidator {
         return Mono.empty();
     }
 
-    private List<String> validateName(User user, List<String> errors) {
+    private void validateName(User user, List<String> errors) {
         if (isNullOrEmpty(user.getName())) {
             errors.add("Name cannot be null or empty");
         }
-        return errors;
     }
 
-    private List<String> validateLastname(User user, List<String> errors) {
+    private void validateLastname(User user, List<String> errors) {
         if (isNullOrEmpty(user.getLastname())) {
             errors.add("Lastname cannot be null or empty");
         }
-        return errors;
     }
 
-    private List<String> validateBaseSalary(User user, List<String> errors) {
+    private void validateBaseSalary(User user, List<String> errors) {
         if (user.getBaseSalary() == null) {
             errors.add("Base salary cannot be null");
         } else {
@@ -53,16 +51,14 @@ public class UserValidator {
                         salaryConfig.getMinSalary(), salaryConfig.getMaxSalary()));
             }
         }
-        return errors;
     }
 
-    private List<String> validateEmail(User user, List<String> errors) {
+    private void validateEmail(User user, List<String> errors) {
         if (user.getEmail() == null) {
             errors.add("Email cannot be null");
         } else if (!isValidEmail(user.getEmail())) {
             errors.add("Email format is invalid");
         }
-        return errors;
     }
 
     private boolean isNullOrEmpty(String str) {
@@ -70,6 +66,6 @@ public class UserValidator {
     }
 
     private boolean isValidEmail(String email) {
-        return email != null && email.matches("^[\\w-.]+@[\\w-]+\\.[a-z]{2,}$");
+        return email.matches("^[\\w-.]+@[\\w-]+\\.[a-z]{2,}$");
     }
 }

@@ -1,0 +1,7 @@
+authentication:
+  paths:
+    base: "/api/v1"
+    users: "/users"
+  salary:
+    min: 0
+    max: 15000000

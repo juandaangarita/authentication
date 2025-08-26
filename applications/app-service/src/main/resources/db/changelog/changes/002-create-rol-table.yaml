@@ -1,0 +1,83 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: Juan Angarita
+      changes:
+        - createTable:
+            tableName: rol
+            columns:
+              - column:
+                  name: rol_id
+                  type: INT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+
+        - insert:
+            tableName: rol
+            columns:
+              - column:
+                  name: rol_id
+                  valueNumeric: 1
+              - column:
+                  name: name
+                  value: user
+              - column:
+                  name: description
+                  value: Normal user
+
+        - insert:
+            tableName: rol
+            columns:
+              - column:
+                  name: rol_id
+                  valueNumeric: 2
+              - column:
+                  name: name
+                  value: admin
+              - column:
+                  name: description
+                  value: Administrator user
+
+  - changeSet:
+      id: 3
+      author: Juan Angarita
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: document_number
+                  type: VARCHAR(20)
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rol_id
+                  type: INT
+                  defaultValueNumeric: 1
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: users
+            baseColumnNames: rol_id
+            referencedTableName: rol
+            referencedColumnNames: rol_id
+            constraintName: fk_users_rol
+
+        - update:
+            tableName: users
+            columns:
+              - column:
+                  name: rol_id
+                  valueNumeric: 1
+            where: rol_id IS NULL

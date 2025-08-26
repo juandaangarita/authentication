@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.onix.api.dto.ApiResponse;
 import com.onix.usecase.users.exception.EmailAlreadyRegisteredException;
+import com.onix.usecase.users.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -39,6 +40,11 @@ public class GlobalFilter implements WebFilter {
         switch (ex) {
             case EmailAlreadyRegisteredException emailAlreadyRegisteredException -> {
                 log.debug("Email already registered exception: {}", emailAlreadyRegisteredException.getMessage());
+                status = HttpStatus.CONFLICT;
+                body = ApiResponse.error(status.value(), VALIDATION_ERROR, ex.getMessage());
+            }
+            case ValidationException validationException -> {
+                log.debug("Validation exception: {}", validationException.getMessage());
                 status = HttpStatus.BAD_REQUEST;
                 body = ApiResponse.error(status.value(), VALIDATION_ERROR, ex.getMessage());
             }

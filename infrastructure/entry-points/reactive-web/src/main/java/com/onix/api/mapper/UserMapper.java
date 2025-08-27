@@ -1,4 +1,4 @@
-package com.onix.api.maper;
+package com.onix.api.mapper;
 
 import com.onix.api.dto.CreateUserDTO;
 import com.onix.api.dto.UserDTO;

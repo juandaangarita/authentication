@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 import com.onix.api.config.AuthenticationConfig;
 import com.onix.api.dto.CreateUserDTO;
 import com.onix.api.dto.UserDTO;
-import com.onix.api.maper.UserMapper;
+import com.onix.api.mapper.UserMapper;
 import com.onix.api.validator.LoggingUserValidator;
 import com.onix.model.users.User;
 import com.onix.usecase.users.UserUseCase;

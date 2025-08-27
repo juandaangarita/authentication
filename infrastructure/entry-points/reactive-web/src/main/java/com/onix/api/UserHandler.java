@@ -3,7 +3,7 @@ package com.onix.api;
 import com.onix.api.config.AuthenticationConfig;
 import com.onix.api.dto.ApiResponse;
 import com.onix.api.dto.CreateUserDTO;
-import com.onix.api.maper.UserMapper;
+import com.onix.api.mapper.UserMapper;
 import com.onix.api.validator.LoggingUserValidator;
 import com.onix.usecase.users.UserUseCase;
 import java.net.URI;

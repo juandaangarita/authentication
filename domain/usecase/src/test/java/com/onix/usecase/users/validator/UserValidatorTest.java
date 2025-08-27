@@ -1,8 +1,6 @@
 package com.onix.usecase.users.validator;
 
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import com.onix.model.users.User;
 import com.onix.usecase.users.config.SalaryConfig;

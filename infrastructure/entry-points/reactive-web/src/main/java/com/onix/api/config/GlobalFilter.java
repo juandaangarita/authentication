@@ -4,8 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.onix.api.dto.ApiResponse;
-import com.onix.usecase.users.exception.EmailAlreadyRegisteredException;
-import com.onix.usecase.users.exception.ValidationException;
+import com.onix.model.users.exception.EmailAlreadyRegisteredException;
+import com.onix.model.users.exception.UnregisteredUserException;
+import com.onix.model.users.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -47,6 +48,11 @@ public class GlobalFilter implements WebFilter {
                 log.debug("Validation exception: {}", validationException.getMessage());
                 status = HttpStatus.BAD_REQUEST;
                 body = ApiResponse.error(status.value(), VALIDATION_ERROR, ex.getMessage());
+            }
+            case UnregisteredUserException unregisteredUserException -> {
+                log.debug("Unregistered client exception: {}", unregisteredUserException.getMessage());
+                status = HttpStatus.NOT_FOUND;
+                body = ApiResponse.error(status.value(), "Not Found", ex.getMessage());
             }
             case IllegalArgumentException illegalArgumentException -> {
                 log.debug("Illegal argument exception: {}", illegalArgumentException.getMessage());

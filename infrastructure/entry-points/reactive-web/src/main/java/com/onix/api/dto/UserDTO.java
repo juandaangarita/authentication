@@ -11,6 +11,7 @@ public record UserDTO(
         String address,
         String phone,
         String email,
+        String documentNumber,
         Long baseSalary
 ) {
 }

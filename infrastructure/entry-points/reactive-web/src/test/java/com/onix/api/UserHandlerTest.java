@@ -13,7 +13,7 @@ import com.onix.api.mapper.UserMapper;
 import com.onix.api.validator.LoggingUserValidator;
 import com.onix.model.users.User;
 import com.onix.usecase.users.UserUseCase;
-import com.onix.usecase.users.exception.ValidationException;
+import com.onix.model.users.exception.ValidationException;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;

@@ -4,7 +4,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.onix.model.users.User;
-import com.onix.usecase.users.exception.ValidationException;
+import com.onix.model.users.exception.ValidationException;
 import com.onix.usecase.users.validator.UserValidator;
 import java.util.List;
 import org.junit.jupiter.api.Test;

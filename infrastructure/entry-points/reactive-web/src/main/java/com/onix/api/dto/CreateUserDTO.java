@@ -9,5 +9,6 @@ public record CreateUserDTO(
         String address,
         String phone,
         String email,
+        String documentNumber,
         Long baseSalary) {
 }

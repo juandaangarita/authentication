@@ -15,6 +15,7 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
         String,
         UserReactiveRepository
 > implements UserRepository {
+
     public UserRepositoryAdapter(UserReactiveRepository repository, ObjectMapper mapper) {
         super(repository, mapper, d -> mapper.map(d, User.class));
     }

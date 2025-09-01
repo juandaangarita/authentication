@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.reactive.TransactionalOperator;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
@@ -25,6 +26,7 @@ public class UserHandler {
     private final AuthenticationConfig authConfig;
     private final UserMapper userMapper;
     private final LoggingUserValidator loggingUserValidator;
+    private final TransactionalOperator transactionalOperator;
 
     public Mono<ServerResponse> listenSaveUser(ServerRequest request) {
         log.trace("Received request to create a new user");
@@ -33,6 +35,7 @@ public class UserHandler {
                 .map(userMapper::toModel)
                 .flatMap(user -> loggingUserValidator.validate(user).thenReturn(user))
                 .flatMap(userUseCase::createUser)
+                .as(transactionalOperator::transactional)
                 .map(userMapper::toDto)
                 .doOnNext(userDTO -> log.debug("User created successfully with ID: {}", userDTO.userId()))
                 .flatMap(userDTO -> ServerResponse
@@ -43,6 +46,28 @@ public class UserHandler {
                                 "User created successfully",
                                 userDTO))
                 );
+    }
+
+    public Mono<ServerResponse> listenValidateUser(ServerRequest request) {
+        String email = request.queryParam("email").orElseThrow(() ->
+                new IllegalArgumentException("Email is required"));
+        String documentNumber = request.queryParam("documentNumber").orElseThrow(() ->
+                new IllegalArgumentException("Document number is required"));
+
+        log.trace("Received request to validate user with email={} and documentNumber={}", email, documentNumber);
+
+        return userUseCase.isUserRegistered(email, null)
+                .as(transactionalOperator::transactional)
+                .map(userMapper::toDto)
+                .doOnNext(userDTO -> log.debug("User validated successfully: {}", userDTO))
+                .flatMap(userDTO -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(ApiResponse.success(
+                                HttpStatus.OK.value(),
+                                "User found",
+                                userDTO))
+                );
+
     }
 
 }

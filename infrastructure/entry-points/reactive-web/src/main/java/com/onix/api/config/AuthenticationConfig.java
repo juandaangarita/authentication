@@ -10,8 +10,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class AuthenticationConfig {
     private String base;
     private String users;
+    private String validate;
 
     public String getUsers() {
         return base + users;
+    }
+
+    public String getValidate() {
+        return base + users + validate;
     }
 }

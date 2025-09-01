@@ -15,13 +15,13 @@ import static org.springdoc.webflux.core.fn.SpringdocRouteBuilder.route;
 public class RouterRest {
 
     private final AuthenticationConfig authConfig;
-    private final UserHandler authUserHandler;
+    private final UserHandler userHandler;
 
     @Bean
-    public RouterFunction<ServerResponse> routerFunction(UserHandler userHandler) {
+    public RouterFunction<ServerResponse> routerFunction(UserHandler handler) {
         return route()
-                .POST(authConfig.getUsers(), authUserHandler::listenSaveUser, UserOpenApi::createUser)
-                .GET(authConfig.getValidate(), authUserHandler::listenValidateUser, UserOpenApi::validateUser)
+                .POST(authConfig.getUsers(), userHandler::listenSaveUser, UserOpenApi::createUser)
+                .GET(authConfig.getValidate(), userHandler::listenValidateUser, UserOpenApi::validateUser)
                 .build();
     }
 }

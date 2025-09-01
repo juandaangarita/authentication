@@ -75,6 +75,4 @@ public class UserOpenApi {
                         .responseCode("500").description("Internal server error")
                         .content(jsonContent));
     }
-
-
 }

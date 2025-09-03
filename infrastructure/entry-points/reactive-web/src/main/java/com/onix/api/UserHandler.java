@@ -54,7 +54,6 @@ public class UserHandler {
                 );
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     public Mono<ServerResponse> listenValidateUser(ServerRequest request) {
         String email = request.queryParam("email").orElseThrow(() ->
                 new IllegalArgumentException("Email is required"));

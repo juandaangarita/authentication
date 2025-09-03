@@ -1,14 +1,12 @@
 package com.onix.security.jwt;
 
 import com.onix.model.users.exception.InvalidCredentialsException;
-import com.onix.r2dbc.entity.UserEntity;
 import com.onix.security.config.JwtConfigProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import java.nio.charset.StandardCharsets;

@@ -8,6 +8,7 @@ import com.onix.model.users.gateways.UserRepository;
 import com.onix.r2dbc.entity.UserEntity;
 import com.onix.r2dbc.helper.ReactiveAdapterOperations;
 import com.onix.r2dbc.repository.UserReactiveRepository;
+
 import com.onix.security.jwt.JwtProvider;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,14 +44,6 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
         return repository.findByEmail(email)
                 .map(entity -> mapper.map(entity, User.class));
     }
-
-//    @Override
-//    public Mono<TokenDTO> login(LoginDTO login) {
-//        return repository.findByEmail(login.email())
-//                .filter(userEntity -> passwordEncoder.matches(login.password(), userEntity.getPassword()))
-//                .map(userDocument -> new TokenDTO(jwtProvider.generateToken(userDocument)))
-//                .switchIfEmpty(Mono.error(new InvalidCredentialsException()));
-//    }
 
     @Override
     public Mono<TokenDTO> login(LoginDTO login) {

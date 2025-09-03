@@ -9,8 +9,4 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
     implementation "org.springdoc:springdoc-openapi-starter-webflux-ui:$springDocVersion"
     implementation 'org.springframework:spring-tx'
-    //JWT
-    implementation("io.jsonwebtoken:jjwt-api:$jjwtVersion")
-    runtimeOnly("io.jsonwebtoken:jjwt-impl:$jjwtVersion")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jjwtVersion")
 }

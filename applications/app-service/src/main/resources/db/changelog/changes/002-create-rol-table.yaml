@@ -4,10 +4,10 @@ databaseChangeLog:
       author: Juan Angarita
       changes:
         - createTable:
-            tableName: rol
+            tableName: roles
             columns:
               - column:
-                  name: rol_id
+                  name: role_id
                   type: INT
                   constraints:
                     primaryKey: true
@@ -22,30 +22,43 @@ databaseChangeLog:
                   type: VARCHAR(255)
 
         - insert:
-            tableName: rol
+            tableName: roles
             columns:
               - column:
-                  name: rol_id
+                  name: role_id
                   valueNumeric: 1
               - column:
                   name: name
-                  value: user
+                  value: USER
               - column:
                   name: description
                   value: Normal user
 
         - insert:
-            tableName: rol
+            tableName: roles
             columns:
               - column:
-                  name: rol_id
+                  name: role_id
                   valueNumeric: 2
               - column:
                   name: name
-                  value: admin
+                  value: ADMIN
               - column:
                   name: description
                   value: Administrator user
+
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: role_id
+                  valueNumeric: 3
+              - column:
+                  name: name
+                  value: ADVISER
+              - column:
+                  name: description
+                  value: Adviser user
 
   - changeSet:
       id: 3
@@ -61,7 +74,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: rol_id
+                  name: role_id
                   type: INT
                   defaultValueNumeric: 1
                   constraints:
@@ -69,15 +82,15 @@ databaseChangeLog:
 
         - addForeignKeyConstraint:
             baseTableName: users
-            baseColumnNames: rol_id
-            referencedTableName: rol
-            referencedColumnNames: rol_id
-            constraintName: fk_users_rol
+            baseColumnNames: role_id
+            referencedTableName: roles
+            referencedColumnNames: role_id
+            constraintName: fk_users_roles
 
         - update:
             tableName: users
             columns:
               - column:
-                  name: rol_id
+                  name: role_id
                   valueNumeric: 1
-            where: rol_id IS NULL
+            where: role_id IS NULL

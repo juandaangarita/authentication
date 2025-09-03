@@ -1,7 +1,5 @@
 package com.onix.r2dbc.entity;
 
-import java.time.LocalDate;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,19 +13,10 @@ import org.springframework.data.relational.core.mapping.Table;
 @Getter
 @Setter
 @Builder
-@Table("users")
-public class UserEntity {
-
+@Table("roles")
+public class RoleEntity {
     @Id
-    private UUID userId;
-    private String name;
-    private String lastname;
-    private LocalDate birthDate;
-    private String address;
-    private String phone;
-    private String email;
-    private String documentNumber;
-    private Long baseSalary;
-    private String password;
     private Integer roleId;
+    private String name;
+    private String description;
 }

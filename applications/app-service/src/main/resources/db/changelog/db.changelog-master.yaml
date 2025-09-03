@@ -3,3 +3,7 @@ databaseChangeLog:
       file: db/changelog/changes/001-create-users-table.yaml
   - include:
       file: db/changelog/changes/002-create-rol-table.yaml
+  - include:
+      file: db/changelog/changes/003-insert-password-column.yaml
+  - include:
+      file: db/changelog/changes/004-not-null-password.yaml

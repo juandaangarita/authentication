@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.onix.api.dto.ApiResponse;
 import com.onix.model.users.exception.EmailAlreadyRegisteredException;
+import com.onix.model.users.exception.InvalidCredentialsException;
 import com.onix.model.users.exception.UnregisteredUserException;
 import com.onix.model.users.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +59,11 @@ public class GlobalFilter implements WebFilter {
                 log.debug("Illegal argument exception: {}", illegalArgumentException.getMessage());
                 status = HttpStatus.BAD_REQUEST;
                 body = ApiResponse.error(status.value(), VALIDATION_ERROR, ex.getMessage());
+            }
+            case InvalidCredentialsException invalidCredentialsException -> {
+                log.debug("Invalid credentials: {}", invalidCredentialsException.getMessage());
+                status = HttpStatus.UNAUTHORIZED;
+                body = ApiResponse.error(status.value(), "Unauthorized", ex.getMessage());
             }
             case ServerWebInputException serverWebInputException -> {
                 log.debug("Server web input exception: {}", serverWebInputException.getMessage());

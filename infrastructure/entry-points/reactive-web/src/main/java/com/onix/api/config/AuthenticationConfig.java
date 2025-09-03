@@ -11,6 +11,7 @@ public class AuthenticationConfig {
     private String base;
     private String users;
     private String validate;
+    private String login;
 
     public String getUsers() {
         return base + users;
@@ -18,5 +19,9 @@ public class AuthenticationConfig {
 
     public String getValidate() {
         return base + users + validate;
+    }
+
+    public String getLogin() {
+        return base + login;
     }
 }

@@ -1,6 +1,7 @@
 package com.onix.api;
 
 import com.onix.api.config.AuthenticationConfig;
+import com.onix.api.openapi.AuthenticateOpenApi;
 import com.onix.api.openapi.UserOpenApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,7 @@ public class RouterRest {
     public RouterFunction<ServerResponse> routerFunction(UserHandler handler) {
         return route()
                 .POST(authConfig.getUsers(), userHandler::listenSaveUser, UserOpenApi::createUser)
+                .POST(authConfig.getLogin(), userHandler::listenLoginUser, AuthenticateOpenApi::authenticateUser)
                 .GET(authConfig.getValidate(), userHandler::listenValidateUser, UserOpenApi::validateUser)
                 .build();
     }

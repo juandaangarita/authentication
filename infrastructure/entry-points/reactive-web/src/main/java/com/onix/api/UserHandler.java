@@ -5,12 +5,15 @@ import com.onix.api.dto.ApiResponse;
 import com.onix.api.dto.CreateUserDTO;
 import com.onix.api.mapper.UserMapper;
 import com.onix.api.validator.LoggingUserValidator;
+import com.onix.model.dto.LoginDTO;
+import com.onix.usecase.authentication.AuthenticationUseCase;
 import com.onix.usecase.users.UserUseCase;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.reactive.TransactionalOperator;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -27,13 +30,16 @@ public class UserHandler {
     private final UserMapper userMapper;
     private final LoggingUserValidator loggingUserValidator;
     private final TransactionalOperator transactionalOperator;
+    private final AuthenticationUseCase authenticationUseCase;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Mono<ServerResponse> listenSaveUser(ServerRequest request) {
         log.trace("Received request to create a new user");
         return request.bodyToMono(CreateUserDTO.class)
                 .doOnNext(dto -> log.trace("Request body: {}", dto))
                 .map(userMapper::toModel)
                 .flatMap(user -> loggingUserValidator.validate(user).thenReturn(user))
+                .doOnNext(user -> log.debug("User data validated successfully for user: {}", user))
                 .flatMap(userUseCase::createUser)
                 .as(transactionalOperator::transactional)
                 .map(userMapper::toDto)
@@ -48,6 +54,7 @@ public class UserHandler {
                 );
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Mono<ServerResponse> listenValidateUser(ServerRequest request) {
         String email = request.queryParam("email").orElseThrow(() ->
                 new IllegalArgumentException("Email is required"));
@@ -68,6 +75,24 @@ public class UserHandler {
                                 userDTO))
                 );
 
+    }
+
+    public Mono<ServerResponse> listenLoginUser(ServerRequest request) {
+        return request
+                .bodyToMono(LoginDTO.class)
+                .doOnNext(dto -> log.trace("Request login for email: {}", dto.email()))
+                .flatMap(authenticationUseCase::login)
+                .map(tokenDTO -> {
+                    log.debug("Login successful, generated token: {}", tokenDTO.token());
+                    return tokenDTO;
+                })
+                .flatMap(tokenDTO -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(ApiResponse.success(
+                                HttpStatus.OK.value(),
+                                "Login successful",
+                                tokenDTO))
+                );
     }
 
 }

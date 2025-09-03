@@ -3,7 +3,7 @@ package com.onix.r2dbc.adapter;
 import com.onix.model.dto.LoginDTO;
 import com.onix.model.dto.TokenDTO;
 import com.onix.model.users.User;
-import com.onix.model.users.exception.InvalidCredentialsException;
+import com.onix.security.exception.InvalidCredentialsException;
 import com.onix.model.users.gateways.UserRepository;
 import com.onix.r2dbc.entity.UserEntity;
 import com.onix.r2dbc.helper.ReactiveAdapterOperations;

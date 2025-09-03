@@ -1,4 +1,4 @@
-package com.onix.model.users.exception;
+package com.onix.security.exception;
 
 public class InvalidCredentialsException extends RuntimeException {
     public InvalidCredentialsException() {

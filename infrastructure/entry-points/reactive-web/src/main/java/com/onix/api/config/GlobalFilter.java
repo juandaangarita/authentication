@@ -5,14 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.onix.api.dto.ApiResponse;
 import com.onix.model.users.exception.EmailAlreadyRegisteredException;
-import com.onix.model.users.exception.InvalidCredentialsException;
+
 import com.onix.model.users.exception.UnregisteredUserException;
 import com.onix.model.users.exception.ValidationException;
+import com.onix.security.exception.InvalidCredentialsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.ServerWebInputException;
@@ -64,6 +66,11 @@ public class GlobalFilter implements WebFilter {
                 log.debug("Invalid credentials: {}", invalidCredentialsException.getMessage());
                 status = HttpStatus.UNAUTHORIZED;
                 body = ApiResponse.error(status.value(), "Unauthorized", ex.getMessage());
+            }
+            case AuthorizationDeniedException authorizationDeniedException -> {
+                log.debug("Authorization denied: {}", authorizationDeniedException.getMessage());
+                status = HttpStatus.FORBIDDEN;
+                body = ApiResponse.error(status.value(), "Forbidden", ex.getMessage());
             }
             case ServerWebInputException serverWebInputException -> {
                 log.debug("Server web input exception: {}", serverWebInputException.getMessage());

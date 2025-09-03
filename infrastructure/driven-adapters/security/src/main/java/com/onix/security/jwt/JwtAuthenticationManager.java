@@ -1,6 +1,6 @@
 package com.onix.security.jwt;
 
-import com.onix.model.users.exception.InvalidCredentialsException;
+import com.onix.security.exception.InvalidCredentialsException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;

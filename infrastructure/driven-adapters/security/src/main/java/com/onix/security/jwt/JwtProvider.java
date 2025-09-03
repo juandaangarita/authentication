@@ -1,6 +1,6 @@
 package com.onix.security.jwt;
 
-import com.onix.model.users.exception.InvalidCredentialsException;
+import com.onix.security.exception.InvalidCredentialsException;
 import com.onix.security.config.JwtConfigProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

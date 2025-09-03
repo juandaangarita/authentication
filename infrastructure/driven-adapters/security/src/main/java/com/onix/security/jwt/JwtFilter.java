@@ -1,6 +1,6 @@
 package com.onix.security.jwt;
 
-import com.onix.model.users.exception.InvalidCredentialsException;
+import com.onix.security.exception.InvalidCredentialsException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;

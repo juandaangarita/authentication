@@ -1,4 +1,4 @@
-package com.onix.adapter;
+package com.onix.r2dbc.adapter;
 
 import com.onix.model.dto.LoginDTO;
 import com.onix.model.dto.TokenDTO;

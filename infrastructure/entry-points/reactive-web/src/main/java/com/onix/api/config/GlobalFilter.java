@@ -11,6 +11,8 @@ import com.onix.model.users.exception.ValidationException;
 import com.onix.security.exception.InvalidCredentialsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +27,7 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalFilter implements WebFilter {
 
     private static final String VALIDATION_ERROR = "Validation error";

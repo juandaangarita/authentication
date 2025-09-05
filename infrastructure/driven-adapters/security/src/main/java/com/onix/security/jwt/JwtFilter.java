@@ -1,6 +1,8 @@
 package com.onix.security.jwt;
 
 import com.onix.security.exception.InvalidCredentialsException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
@@ -10,6 +12,7 @@ import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE + 1)
 public class JwtFilter implements WebFilter {
 
     @Override
@@ -20,9 +23,9 @@ public class JwtFilter implements WebFilter {
             return chain.filter(exchange);
         String auth = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if(auth == null)
-            return Mono.error(new InvalidCredentialsException("No token was found"));
+            throw new InvalidCredentialsException("No token was found");
         if(!auth.startsWith("Bearer "))
-            return Mono.error(new InvalidCredentialsException("Invalid auth"));
+            throw new InvalidCredentialsException("Invalid auth");
         String token = auth.replace("Bearer ", "");
         exchange.getAttributes().put("token", token);
         return chain.filter(exchange);

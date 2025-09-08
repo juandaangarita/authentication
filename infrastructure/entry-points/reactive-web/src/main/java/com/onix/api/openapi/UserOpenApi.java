@@ -6,7 +6,6 @@ import static org.springdoc.core.fn.builders.parameter.Builder.parameterBuilder;
 import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuilder;
 import static org.springdoc.core.fn.builders.schema.Builder.schemaBuilder;
 
-import com.onix.api.dto.ApiResponse;
 import com.onix.api.dto.CreateUserDTO;
 import com.onix.api.dto.UserDTO;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;

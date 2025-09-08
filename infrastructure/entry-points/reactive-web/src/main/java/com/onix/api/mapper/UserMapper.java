@@ -12,5 +12,6 @@ public interface UserMapper {
     UserDTO toDto(User user);
 
     @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "roleName", ignore = true)
     User toModel(CreateUserDTO dto);
 }

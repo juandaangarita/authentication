@@ -10,6 +10,7 @@ import com.onix.api.dto.CreateUserDTO;
 import com.onix.api.dto.UserDTO;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 import lombok.experimental.UtilityClass;
 import org.springdoc.core.fn.builders.operation.Builder;
@@ -92,6 +93,42 @@ public class UserOpenApi {
                         .example("1234567890"))
                 .response(UtilOpenApi.responseApiBuilder(200, "User found", successResponse))
                 .response(UtilOpenApi.responseApiBuilder(404, "User not found", null))
+                .response(UtilOpenApi.responseApiBuilder(500, "Internal server error", null));
+    }
+
+    public void getUsersByEmails(Builder builder) {
+        var successResponse = new UserDTO(
+                UUID.randomUUID(),
+                "Pedro",
+                "Perez",
+                LocalDate.of(2000, 1, 1),
+                "Street 123",
+                "34567890",
+                "email@email.com",
+                "1234567890",
+                15000L);
+
+        Set<String> requestExample = Set.of(
+                "email@email.com",
+                "email1@email.com",
+                "email2@email.com");
+
+
+        builder
+                .operationId("getUsersByEmails")
+                .summary("Batch get users")
+                .description("Get users in the system by batch of emails")
+                .tag("User")
+                .requestBody(requestBodyBuilder()
+                        .required(true)
+                        .content(contentBuilder()
+                                .mediaType(MediaType.APPLICATION_JSON_VALUE)
+                                .schema(schemaBuilder().implementation(Set.class))
+                                .example(exampleOjectBuilder()
+                                        .value(UtilOpenApi.createObjectToString(requestExample)))))
+                .response(UtilOpenApi.responseApiBuilder(201, "User created successfully", successResponse))
+                .response(UtilOpenApi.responseApiBuilder(400, "Validation error", null))
+                .response(UtilOpenApi.responseApiBuilder(409, "Conflict error", null))
                 .response(UtilOpenApi.responseApiBuilder(500, "Internal server error", null));
     }
 }

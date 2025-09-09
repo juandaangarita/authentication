@@ -22,6 +22,7 @@ public class RouterRest {
     public RouterFunction<ServerResponse> routerFunction(UserHandler handler) {
         return route()
                 .POST(authConfig.getUsers(), userHandler::listenSaveUser, UserOpenApi::createUser)
+                .POST(authConfig.getBatch(), userHandler::listenGetUsersByEmails, UserOpenApi::getUsersByEmails)
                 .POST(authConfig.getLogin(), userHandler::listenLoginUser, AuthenticateOpenApi::authenticateUser)
                 .GET(authConfig.getValidate(), userHandler::listenValidateUser, UserOpenApi::validateUser)
                 .build();

@@ -3,12 +3,15 @@ package com.onix.api;
 import com.onix.api.config.AuthenticationConfig;
 import com.onix.api.dto.ApiResponse;
 import com.onix.api.dto.CreateUserDTO;
+import com.onix.api.dto.UserBatchRequestDTO;
 import com.onix.api.mapper.UserMapper;
 import com.onix.api.validator.LoggingUserValidator;
 import com.onix.model.dto.LoginDTO;
 import com.onix.usecase.authentication.AuthenticationUseCase;
 import com.onix.usecase.users.UserUseCase;
 import java.net.URI;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -91,6 +94,32 @@ public class UserHandler {
                                 HttpStatus.OK.value(),
                                 "Login successful",
                                 tokenDTO))
+                );
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Mono<ServerResponse> listenGetUsersByEmails(ServerRequest request) {
+        log.trace("Received batch request to get users by email");
+
+        return request
+                .bodyToMono(UserBatchRequestDTO.class)
+                .map(UserBatchRequestDTO::emails)
+                .doOnNext(emails -> log.trace("Request body emails: {}", emails))
+                .flatMap(userUseCase::getUserByEmails)
+                .map(userMap -> userMap.entrySet().stream()
+                        .collect(Collectors.toMap(
+                                Map.Entry::getKey,
+                                entry -> userMapper.toDto(entry.getValue())
+                        ))
+                )
+                .as(transactionalOperator::transactional)
+                .doOnNext(userMap -> log.debug("Users retrieved successfully: {}", userMap.keySet()))
+                .flatMap(userMap -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(ApiResponse.success(
+                                HttpStatus.OK.value(),
+                                "Users retrieved successfully",
+                                userMap))
                 );
     }
 

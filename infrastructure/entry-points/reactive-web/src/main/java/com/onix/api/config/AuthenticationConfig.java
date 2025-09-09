@@ -12,6 +12,7 @@ public class AuthenticationConfig {
     private String users;
     private String validate;
     private String login;
+    private String batch;
 
     public String getUsers() {
         return base + users;
@@ -23,5 +24,9 @@ public class AuthenticationConfig {
 
     public String getLogin() {
         return base + login;
+    }
+
+    public String getBatch() {
+        return base +users + batch;
     }
 }

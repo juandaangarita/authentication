@@ -7,3 +7,5 @@ databaseChangeLog:
       file: db/changelog/changes/003-insert-password-column.yaml
   - include:
       file: db/changelog/changes/004-not-null-password.yaml
+  - include:
+      file: db/changelog/changes/005-create-admin-user.yaml

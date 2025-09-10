@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: seed-admin-user
+      author: Juan Angarita
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: user_id
+                  type: UUID
+                  valueComputed: "gen_random_uuid()"
+              - column:
+                  name: name
+                  value: "Admin"
+              - column:
+                  name: lastname
+                  value: "Admin"
+              - column:
+                  name: birth_date
+                  valueDate: "1990-01-01"
+              - column:
+                  name: address
+                  value: "Admin Address"
+              - column:
+                  name: phone
+                  value: "1234567890"
+              - column:
+                  name: email
+                  value: "admin@email.com"
+              - column:
+                  name: base_salary
+                  valueNumeric: 100000
+              - column:
+                  name: document_number
+                  value: "ADMIN1234"
+              - column:
+                  name: role_id
+                  valueNumeric: 2
+              - column:
+                  name: password
+                  value: "$2a$12$btVUGzVfkjKKjmPYp9lw9uXRrBadadfgy2PsMi6lWr5aiadeL7xWq"

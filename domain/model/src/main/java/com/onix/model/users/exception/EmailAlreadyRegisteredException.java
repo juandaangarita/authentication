@@ -1,4 +1,4 @@
-package com.onix.usecase.users.exception;
+package com.onix.model.users.exception;
 
 public class EmailAlreadyRegisteredException extends RuntimeException{
     public EmailAlreadyRegisteredException(String email) {

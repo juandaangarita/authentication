@@ -1,12 +1,10 @@
 package com.onix.usecase.users.validator;
 
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import com.onix.model.users.User;
 import com.onix.usecase.users.config.SalaryConfig;
-import com.onix.usecase.users.exception.ValidationException;
+import com.onix.model.users.exception.ValidationException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;

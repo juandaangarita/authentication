@@ -7,8 +7,8 @@ import static org.mockito.Mockito.verify;
 
 import com.onix.model.users.User;
 import com.onix.model.users.gateways.UserRepository;
-import com.onix.usecase.users.exception.EmailAlreadyRegisteredException;
-import com.onix.usecase.users.exception.ValidationException;
+import com.onix.model.users.exception.EmailAlreadyRegisteredException;
+import com.onix.model.users.exception.ValidationException;
 import com.onix.usecase.users.validator.UserValidator;
 import java.time.LocalDate;
 import java.util.List;

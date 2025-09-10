@@ -1,4 +1,4 @@
-package com.onix.api.maper;
+package com.onix.api.mapper;
 
 import com.onix.api.dto.CreateUserDTO;
 import com.onix.api.dto.UserDTO;
@@ -12,5 +12,6 @@ public interface UserMapper {
     UserDTO toDto(User user);
 
     @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "roleName", ignore = true)
     User toModel(CreateUserDTO dto);
 }

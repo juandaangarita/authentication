@@ -26,5 +26,8 @@ public class UserEntity {
     private String address;
     private String phone;
     private String email;
+    private String documentNumber;
     private Long baseSalary;
+    private String password;
+    private Integer roleId;
 }

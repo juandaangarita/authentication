@@ -4,13 +4,19 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.onix.api.dto.ApiResponse;
-import com.onix.usecase.users.exception.EmailAlreadyRegisteredException;
-import com.onix.usecase.users.exception.ValidationException;
+import com.onix.model.users.exception.EmailAlreadyRegisteredException;
+
+import com.onix.model.users.exception.UnregisteredUserException;
+import com.onix.model.users.exception.ValidationException;
+import com.onix.security.exception.InvalidCredentialsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.ServerWebInputException;
@@ -21,6 +27,7 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalFilter implements WebFilter {
 
     private static final String VALIDATION_ERROR = "Validation error";
@@ -48,10 +55,25 @@ public class GlobalFilter implements WebFilter {
                 status = HttpStatus.BAD_REQUEST;
                 body = ApiResponse.error(status.value(), VALIDATION_ERROR, ex.getMessage());
             }
+            case UnregisteredUserException unregisteredUserException -> {
+                log.debug("Unregistered client exception: {}", unregisteredUserException.getMessage());
+                status = HttpStatus.NOT_FOUND;
+                body = ApiResponse.error(status.value(), "Not Found", ex.getMessage());
+            }
             case IllegalArgumentException illegalArgumentException -> {
                 log.debug("Illegal argument exception: {}", illegalArgumentException.getMessage());
                 status = HttpStatus.BAD_REQUEST;
                 body = ApiResponse.error(status.value(), VALIDATION_ERROR, ex.getMessage());
+            }
+            case InvalidCredentialsException invalidCredentialsException -> {
+                log.debug("Invalid credentials: {}", invalidCredentialsException.getMessage());
+                status = HttpStatus.UNAUTHORIZED;
+                body = ApiResponse.error(status.value(), "Unauthorized", ex.getMessage());
+            }
+            case AuthorizationDeniedException authorizationDeniedException -> {
+                log.debug("Authorization denied: {}", authorizationDeniedException.getMessage());
+                status = HttpStatus.FORBIDDEN;
+                body = ApiResponse.error(status.value(), "Forbidden", ex.getMessage());
             }
             case ServerWebInputException serverWebInputException -> {
                 log.debug("Server web input exception: {}", serverWebInputException.getMessage());

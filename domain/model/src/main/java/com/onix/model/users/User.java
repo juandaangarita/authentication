@@ -23,5 +23,9 @@ public class User {
     private String address;
     private String phone;
     private String email;
+    private String documentNumber;
     private Long baseSalary;
+    private Integer roleId;
+    private String roleName;
+    private String password;
 }

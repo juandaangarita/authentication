@@ -57,7 +57,8 @@ class UserHandlerTest {
     @BeforeEach
     void setup() {
         createUserDTO = new CreateUserDTO("Pedro", "Perez", LocalDate.of(1990,1,1),
-                "Street 123", "1234567890", "email@email.com", 3000L);
+                "Street 123", "1234567890", "email@email.com", "123", 3000L,
+                "paswword", 1);
 
         user = User.builder()
                 .name("Pedro")
@@ -69,7 +70,7 @@ class UserHandlerTest {
                 .baseSalary(3000L)
                 .build();
 
-        userDTO = new UserDTO(UUID.randomUUID(), "Pedro", "Perez", LocalDate.of(1990,1,1),"", "", "email@email.com", 3000L);
+        userDTO = new UserDTO(UUID.randomUUID(), "Pedro", "Perez", LocalDate.of(1990,1,1),"", "", "email@email.com", "123", 3000L);
 
         lenient().when(userMapper.toModel(any())).thenReturn(user);
         lenient().when(userMapper.toDto(any())).thenReturn(userDTO);
@@ -98,7 +99,8 @@ class UserHandlerTest {
                 .thenReturn(Mono.error(new ValidationException(List.of("Invalid user"))));
 
         CreateUserDTO createInvalidUserDTO = new CreateUserDTO("", "Perez", LocalDate.of(1990,1,1),
-                "Street 123", "1234567890", "email@email.com", 3000L);
+                "Street 123", "1234567890", "email@email.com", "123", 3000L,
+                "paswword", 1);
 
         ServerRequest request = MockServerRequest.builder()
                 .method(HttpMethod.POST)

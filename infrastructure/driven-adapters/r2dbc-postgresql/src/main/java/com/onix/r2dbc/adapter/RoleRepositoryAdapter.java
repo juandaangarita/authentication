@@ -5,7 +5,6 @@ import com.onix.model.roles.gateways.RoleRepository;
 import com.onix.r2dbc.entity.RoleEntity;
 import com.onix.r2dbc.helper.ReactiveAdapterOperations;
 import com.onix.r2dbc.repository.RoleReactiveRepository;
-import com.onix.security.jwt.JwtProvider;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;

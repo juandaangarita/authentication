@@ -11,7 +11,9 @@ import com.onix.api.dto.CreateUserDTO;
 import com.onix.api.dto.UserDTO;
 import com.onix.api.mapper.UserMapper;
 import com.onix.api.validator.LoggingUserValidator;
+import com.onix.model.dto.TokenDTO;
 import com.onix.model.users.User;
+import com.onix.usecase.authentication.AuthenticationUseCase;
 import com.onix.usecase.users.UserUseCase;
 import com.onix.model.users.exception.ValidationException;
 import java.net.URI;
@@ -27,6 +29,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.reactive.function.server.MockServerRequest;
+import org.springframework.transaction.reactive.TransactionalOperator;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
@@ -50,14 +53,22 @@ class UserHandlerTest {
     @Mock
     private LoggingUserValidator loggingUserValidator;
 
+    @Mock
+    private TransactionalOperator transactionalOperator;
+
+    @Mock
+    private AuthenticationUseCase authenticationUseCase;
+
     private User user;
     private UserDTO userDTO;
     private CreateUserDTO createUserDTO;
+    private TokenDTO tokenDTO;
 
     @BeforeEach
     void setup() {
         createUserDTO = new CreateUserDTO("Pedro", "Perez", LocalDate.of(1990,1,1),
-                "Street 123", "1234567890", "email@email.com", 3000L);
+                "Street 123", "1234567890", "email@email.com", "123", 3000L,
+                "paswword", 1);
 
         user = User.builder()
                 .name("Pedro")
@@ -69,13 +80,17 @@ class UserHandlerTest {
                 .baseSalary(3000L)
                 .build();
 
-        userDTO = new UserDTO(UUID.randomUUID(), "Pedro", "Perez", LocalDate.of(1990,1,1),"", "", "email@email.com", 3000L);
+        userDTO = new UserDTO(UUID.randomUUID(), "Pedro", "Perez", LocalDate.of(1990,1,1),"", "", "email@email.com", "123", 3000L);
+
+        tokenDTO = new TokenDTO("mockedToken");
 
         lenient().when(userMapper.toModel(any())).thenReturn(user);
         lenient().when(userMapper.toDto(any())).thenReturn(userDTO);
         lenient().when(loggingUserValidator.validate(any())).thenReturn(Mono.empty());
         lenient().when(userUseCase.createUser(any())).thenReturn(Mono.just(user));
         lenient().when(authConfig.getUsers()).thenReturn("/api/v1/users/");
+        lenient().when(transactionalOperator.transactional(any(Mono.class))).thenAnswer(inv -> inv.getArgument(0));
+        lenient().when(authenticationUseCase.login(any())).thenReturn(Mono.just(tokenDTO));
     }
 
     @Test
@@ -98,7 +113,8 @@ class UserHandlerTest {
                 .thenReturn(Mono.error(new ValidationException(List.of("Invalid user"))));
 
         CreateUserDTO createInvalidUserDTO = new CreateUserDTO("", "Perez", LocalDate.of(1990,1,1),
-                "Street 123", "1234567890", "email@email.com", 3000L);
+                "Street 123", "1234567890", "email@email.com", "123", 3000L,
+                "paswword", 1);
 
         ServerRequest request = MockServerRequest.builder()
                 .method(HttpMethod.POST)

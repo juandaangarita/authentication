@@ -1,11 +1,14 @@
 package com.onix.config;
 
+import com.onix.model.users.gateways.UserRepository;
+import com.onix.usecase.users.validator.UserValidator;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 public class UseCasesConfigTest {
 
@@ -33,6 +36,16 @@ public class UseCasesConfigTest {
         @Bean
         public MyUseCase myUseCase() {
             return new MyUseCase();
+        }
+
+        @Bean
+        public UserRepository userRepository() {
+            return mock(UserRepository.class);
+        }
+
+        @Bean
+        public UserValidator userValidator() {
+            return mock(UserValidator.class);
         }
     }
 

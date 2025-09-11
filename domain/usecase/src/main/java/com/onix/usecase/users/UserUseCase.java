@@ -4,7 +4,6 @@ import com.onix.model.users.User;
 import com.onix.model.users.gateways.UserRepository;
 import com.onix.model.users.exception.EmailAlreadyRegisteredException;
 import com.onix.usecase.users.validator.UserValidator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;

@@ -2,6 +2,9 @@ authentication:
   paths:
     base: "/api/v1"
     users: "/users"
+    validate: "/validate"
+    login: "/login"
+    batch: "/batch"
   salary:
     min: 0
     max: 15000000

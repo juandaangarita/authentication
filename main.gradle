@@ -83,7 +83,8 @@ subprojects {
                         'com/onix/api/mapper/UserMapper.class',
                         'com/onix/api/mapper/UserMapperImpl.class',
                         'com/onix/api/config/ValidationConfig.class',
-                        'com/onix/api/config/SalaryConfigAdapter.class'
+                        'com/onix/api/config/SalaryConfigAdapter.class',
+                        'com/onix/MainApplication.class',
                 ])
             }))
         }
@@ -106,6 +107,7 @@ tasks.register('jacocoMergedReport', JacocoReport) {
             exclude 'com/onix/api/mapper/UserMapperImpl.class'
             exclude 'com/onix/api/config/ValidationConfig.class'
             exclude 'com/onix/api/config/SalaryConfigAdapter.class'
+            exclude 'com/onix/MainApplication.class'
         }
     })
 

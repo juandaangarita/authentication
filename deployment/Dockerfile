@@ -9,8 +9,8 @@ COPY gradle ./gradle
 # Copiamos todo el código del proyecto
 COPY . .
 
-# Compilamos y empaquetamos el proyecto (sin tests para acelerar)
-RUN ./gradlew clean build -x validateStructure -x test
+# Compilamos y empaquetamos el proyecto
+RUN ./gradlew clean build -x validateStructure
 
 # --- Etapa de ejecución ---
 FROM eclipse-temurin:21-jre-alpine

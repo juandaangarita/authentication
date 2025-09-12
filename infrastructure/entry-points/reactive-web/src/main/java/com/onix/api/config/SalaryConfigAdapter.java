@@ -2,11 +2,13 @@ package com.onix.api.config;
 
 import com.onix.usecase.users.config.SalaryConfig;
 import java.math.BigDecimal;
+import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+@Generated
 @Configuration
 @ConfigurationProperties(prefix = "authentication.salary")
 @Getter

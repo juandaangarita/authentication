@@ -5,12 +5,15 @@ import static org.mockito.Mockito.when;
 
 import com.onix.api.config.AuthenticationConfig;
 import com.onix.api.dto.CreateUserDTO;
+import com.onix.api.dto.LoginDTO;
+import com.onix.api.dto.TokenDTO;
 import com.onix.api.dto.UserBatchRequestDTO;
 import com.onix.api.dto.UserDTO;
+import com.onix.api.mapper.LoginMapper;
 import com.onix.api.mapper.UserMapper;
 import com.onix.api.validator.LoggingUserValidator;
-import com.onix.model.dto.LoginDTO;
-import com.onix.model.dto.TokenDTO;
+import com.onix.model.login.Login;
+import com.onix.model.login.Token;
 import com.onix.model.users.User;
 import com.onix.security.config.JwtConfigProperties;
 import com.onix.security.config.SecurityConfig;
@@ -21,7 +24,6 @@ import com.onix.security.repository.SecurityContextRepository;
 import com.onix.usecase.authentication.AuthenticationUseCase;
 import com.onix.usecase.users.UserUseCase;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -67,6 +69,9 @@ class RouterRestTest {
 
     @MockitoBean
     private UserMapper userMapper;
+
+    @MockitoBean
+    private LoginMapper loginMapper;
 
     @MockitoBean
     private LoggingUserValidator loggingUserValidator;
@@ -183,9 +188,13 @@ class RouterRestTest {
     @Test
     void shouldLoginUser() {
         LoginDTO loginDTO = new LoginDTO("email@email.com", "password");
+        Login login = new Login("email@email.com", "password");
         TokenDTO tokenDTO = new TokenDTO("sample-token");
+        Token token = new Token("sample-token");
 
-        when(authenticationUseCase.login(any())).thenReturn(Mono.just(tokenDTO));
+        when(authenticationUseCase.login(any())).thenReturn(Mono.just(token));
+        when(loginMapper.loginToModel(any())).thenReturn(login);
+        when(loginMapper.tokenToDTO(any())).thenReturn(tokenDTO);
 
         webTestClient.post()
                 .uri(LOGIN)

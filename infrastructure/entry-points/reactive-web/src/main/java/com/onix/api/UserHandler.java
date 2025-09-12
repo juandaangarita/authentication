@@ -3,10 +3,11 @@ package com.onix.api;
 import com.onix.api.config.AuthenticationConfig;
 import com.onix.api.dto.ApiResponse;
 import com.onix.api.dto.CreateUserDTO;
+import com.onix.api.dto.LoginDTO;
 import com.onix.api.dto.UserBatchRequestDTO;
+import com.onix.api.mapper.LoginMapper;
 import com.onix.api.mapper.UserMapper;
 import com.onix.api.validator.LoggingUserValidator;
-import com.onix.model.dto.LoginDTO;
 import com.onix.usecase.authentication.AuthenticationUseCase;
 import com.onix.usecase.users.UserUseCase;
 import java.net.URI;
@@ -34,6 +35,7 @@ public class UserHandler {
     private final LoggingUserValidator loggingUserValidator;
     private final TransactionalOperator transactionalOperator;
     private final AuthenticationUseCase authenticationUseCase;
+    private final LoginMapper loginMapper;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public Mono<ServerResponse> listenSaveUser(ServerRequest request) {
@@ -83,11 +85,13 @@ public class UserHandler {
         return request
                 .bodyToMono(LoginDTO.class)
                 .doOnNext(dto -> log.trace("Request login for email: {}", dto.email()))
+                .map(loginMapper::loginToModel)
                 .flatMap(authenticationUseCase::login)
                 .map(tokenDTO -> {
                     log.debug("Login successful, generated token: {}", tokenDTO.token());
                     return tokenDTO;
                 })
+                .map(loginMapper::tokenToDTO)
                 .flatMap(tokenDTO -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(ApiResponse.success(

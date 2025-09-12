@@ -5,8 +5,8 @@ import static org.springdoc.core.fn.builders.exampleobject.Builder.exampleOjectB
 import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuilder;
 import static org.springdoc.core.fn.builders.schema.Builder.schemaBuilder;
 
-import com.onix.model.dto.LoginDTO;
-import com.onix.model.dto.TokenDTO;
+import com.onix.model.login.Login;
+import com.onix.model.login.Token;
 import lombok.experimental.UtilityClass;
 import org.springdoc.core.fn.builders.operation.Builder;
 import org.springframework.http.MediaType;
@@ -16,9 +16,9 @@ public class AuthenticateOpenApi {
 
     public void authenticateUser(Builder builder) {
 
-        var requestExample = new LoginDTO("email@email.com", "password");
+        var requestExample = new Login("email@email.com", "password");
 
-        var successResponse = new TokenDTO("sample-token");
+        var successResponse = new Token("sample-token");
 
         builder
                 .operationId("loginUser")
@@ -29,7 +29,7 @@ public class AuthenticateOpenApi {
                         .required(true)
                         .content(contentBuilder()
                                 .mediaType(MediaType.APPLICATION_JSON_VALUE)
-                                .schema(schemaBuilder().implementation(LoginDTO.class))
+                                .schema(schemaBuilder().implementation(Login.class))
                                 .example(exampleOjectBuilder()
                                         .value(UtilOpenApi.createObjectToString(requestExample)))))
                 .response(UtilOpenApi.responseApiBuilder(200, "Success", successResponse))

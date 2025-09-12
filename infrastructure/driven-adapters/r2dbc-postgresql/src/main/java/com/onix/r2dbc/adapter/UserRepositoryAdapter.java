@@ -1,7 +1,7 @@
 package com.onix.r2dbc.adapter;
 
-import com.onix.model.dto.LoginDTO;
-import com.onix.model.dto.TokenDTO;
+import com.onix.model.login.Login;
+import com.onix.model.login.Token;
 import com.onix.model.users.User;
 import com.onix.security.exception.InvalidCredentialsException;
 import com.onix.model.users.gateways.UserRepository;
@@ -46,7 +46,7 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
     }
 
     @Override
-    public Mono<TokenDTO> login(LoginDTO login) {
+    public Mono<Token> login(Login login) {
         return repository.findByEmail(login.email())
                 .filter(userEntity -> passwordEncoder.matches(login.password(), userEntity.getPassword()))
                 .flatMap(userEntity -> {
@@ -57,7 +57,7 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
                                 return user;
                             });
                 })
-                .map(user -> new TokenDTO(jwtProvider.generateToken(login.email(), user.getRoleName())))
+                .map(user -> new Token(jwtProvider.generateToken(login.email(), user.getRoleName())))
                 .switchIfEmpty(Mono.error(new InvalidCredentialsException()));
     }
 }

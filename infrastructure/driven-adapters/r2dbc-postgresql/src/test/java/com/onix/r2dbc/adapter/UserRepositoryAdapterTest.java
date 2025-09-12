@@ -6,7 +6,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.onix.model.dto.LoginDTO;
+import com.onix.model.login.Login;
 import com.onix.model.users.User;
 import com.onix.r2dbc.entity.UserEntity;
 import com.onix.r2dbc.repository.UserReactiveRepository;
@@ -106,7 +106,7 @@ class UserRepositoryAdapterTest {
     @Test
     void shouldLoginSuccessfullyWhenCredentialsAreValid() {
         // Arrange
-        LoginDTO loginDto = new LoginDTO("test@mail.com", "password");
+        Login login = new Login("test@mail.com", "password");
         when(userReactiveRepository.findByEmail("test@mail.com")).thenReturn(Mono.just(userEntity));
         when(passwordEncoder.matches("password", "encodedPassword")).thenReturn(true);
         when(mapper.map(userEntity, User.class)).thenReturn(user);
@@ -114,7 +114,7 @@ class UserRepositoryAdapterTest {
         when(jwtProvider.generateToken("test@mail.com", "USER")).thenReturn("mock-token");
 
         // Act & Assert
-        StepVerifier.create(userRepositoryAdapter.login(loginDto))
+        StepVerifier.create(userRepositoryAdapter.login(login))
                 .expectNextMatches(tokenDto -> {
                     assertNotNull(tokenDto.token());
                     return "mock-token".equals(tokenDto.token());
@@ -130,12 +130,12 @@ class UserRepositoryAdapterTest {
     @Test
     void shouldFailLoginWhenPasswordIsIncorrect() {
         // Arrange
-        LoginDTO loginDto = new LoginDTO("test@mail.com", "wrong-password");
+        Login login = new Login("test@mail.com", "wrong-password");
         when(userReactiveRepository.findByEmail("test@mail.com")).thenReturn(Mono.just(userEntity));
         when(passwordEncoder.matches("wrong-password", "encodedPassword")).thenReturn(false);
 
         // Act & Assert
-        StepVerifier.create(userRepositoryAdapter.login(loginDto))
+        StepVerifier.create(userRepositoryAdapter.login(login))
                 .expectError(InvalidCredentialsException.class)
                 .verify();
 
@@ -148,11 +148,11 @@ class UserRepositoryAdapterTest {
     @Test
     void shouldFailLoginWhenUserDoesNotExist() {
         // Arrange
-        LoginDTO loginDto = new LoginDTO("nonexistent@mail.com", "password");
+        Login login = new Login("nonexistent@mail.com", "password");
         when(userReactiveRepository.findByEmail("nonexistent@mail.com")).thenReturn(Mono.empty());
 
         // Act & Assert
-        StepVerifier.create(userRepositoryAdapter.login(loginDto))
+        StepVerifier.create(userRepositoryAdapter.login(login))
                 .expectError(InvalidCredentialsException.class)
                 .verify();
 

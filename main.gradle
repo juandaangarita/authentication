@@ -82,6 +82,8 @@ subprojects {
                 fileTree(dir: it, exclude: [
                         'com/onix/api/mapper/UserMapper.class',
                         'com/onix/api/mapper/UserMapperImpl.class',
+                        'com/onix/api/mapper/LoginMapper.class',
+                        'com/onix/api/mapper/LoginMapperImpl.class',
                         'com/onix/api/config/ValidationConfig.class',
                         'com/onix/api/config/SalaryConfigAdapter.class',
                         'com/onix/MainApplication.class',
@@ -105,6 +107,8 @@ tasks.register('jacocoMergedReport', JacocoReport) {
         it.asFileTree.matching {
             exclude 'com/onix/api/mapper/UserMapper.class'
             exclude 'com/onix/api/mapper/UserMapperImpl.class'
+            exclude 'com/onix/api/mapper/LoginMapper.class'
+            exclude 'com/onix/api/mapper/LoginMapperImpl.class'
             exclude 'com/onix/api/config/ValidationConfig.class'
             exclude 'com/onix/api/config/SalaryConfigAdapter.class'
             exclude 'com/onix/MainApplication.class'

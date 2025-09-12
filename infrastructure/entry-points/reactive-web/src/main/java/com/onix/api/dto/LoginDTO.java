@@ -1,4 +1,4 @@
-package com.onix.model.dto;
+package com.onix.api.dto;
 
 public record LoginDTO (
         String email,

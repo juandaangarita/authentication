@@ -4,8 +4,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.onix.model.dto.LoginDTO;
-import com.onix.model.dto.TokenDTO;
+import com.onix.model.login.Login;
+import com.onix.model.login.Token;
 import com.onix.model.users.gateways.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,11 +25,11 @@ class AuthenticationUseCaseTest {
 
     @Test
     void testLogin() {
-        TokenDTO tokenDTO = new TokenDTO("token");
-        when(userRepository.login(any())).thenReturn(Mono.just(new TokenDTO("token")));
+        Token token = new Token("token");
+        when(userRepository.login(any())).thenReturn(Mono.just(new Token("token")));
 
-        StepVerifier.create(authenticationUseCase.login(new LoginDTO("email", "password")))
-            .expectNext(tokenDTO)
+        StepVerifier.create(authenticationUseCase.login(new Login("email", "password")))
+            .expectNext(token)
             .verifyComplete();
 
         verify(userRepository).login(any());
